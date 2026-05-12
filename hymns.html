@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hymns List</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* PAGE-SPECIFIC STYLES */
+
+        body{
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container{
+            max-width: 700px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1{
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+
+        .search-box{
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .hymn-item{
+            background: #fff;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+            transition: 0.2s;
+        }
+
+        .hymn-item:hover{
+            transform: translateY(-2px);
+        }
+
+        .hymn-title{
+            font-weight: 500;
+        }
+
+        .hymn-number{
+            background: #1e3c72;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Hymns</h1>
+
+    <!-- SEARCH -->
+    <input type="text" id="searchInput" class="search-box" placeholder="Search hymn...">
+
+    <!-- LIST -->
+    <div id="hymnsList"></div>
+
+</div>
+
+<script>
+    let hymnsData = [];
+
+    // LOAD JSON
+    fetch("hymns.json")
+        .then(res => res.json())
+        .then(data => {
+            hymnsData = data;
+            displayHymns(data);
+        });
+
+    // DISPLAY FUNCTION
+    function displayHymns(data){
+        const list = document.getElementById("hymnsList");
+        list.innerHTML = "";
+
+        data.forEach(hymn => {
+            list.innerHTML += `
+                <a class="hymn-item" href="hymn.html?id=${hymn.id}">
+                    <div class="hymn-title">${hymn.id}. ${hymn.title}</div>
+                    <div class="hymn-number">Open</div>
+                </a>
+            `;
+        });
+    }
+
+    // SEARCH FUNCTION
+    document.getElementById("searchInput").addEventListener("input", function(){
+
+        let value = this.value.toLowerCase();
+
+        let filtered = hymnsData.filter(h =>
+            h.title.toLowerCase().includes(value) ||
+            h.id.toString().includes(value)
+        );
+
+        displayHymns(filtered);
+    });
+
+</script>
+
+</body>
+</html>
