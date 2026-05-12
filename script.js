@@ -91,3 +91,6 @@ function openHymn(id) {
 
 // Optional: log helper
 console.log("Hymns App Script Loaded");
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
